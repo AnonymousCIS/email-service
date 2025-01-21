@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Tag(name="이메일 API")
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api/email")
 public class EmailController {
 
 private final Utils utils;
