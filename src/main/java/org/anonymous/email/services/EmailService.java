@@ -3,10 +3,11 @@ package org.anonymous.email.services;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.anonymous.email.controllers.RequestEmail;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
@@ -15,8 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+@Lazy
 @Service
-@Profile("email")
 @RequiredArgsConstructor
 public class EmailService {
 
@@ -41,6 +42,7 @@ public class EmailService {
             List<String> bcc = form.getBcc();
             String subject = form.getSubject();
             String content = form.getContent();
+            List<MultipartFile> files = form.getFiles();
 
             tplData.put("to", to);
             tplData.put("cc", cc);
@@ -51,6 +53,8 @@ public class EmailService {
             context.setVariables(tplData);
 
             String html = templateEngine.process("email/" + tpl, context);
+
+            boolean isFileAttached = files != null && !files.isEmpty();
 
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
@@ -66,7 +70,13 @@ public class EmailService {
 
             helper.setSubject(subject);
             helper.setText(html, true);
-
+            // 파일 첨부 처리 S
+            if (isFileAttached) {
+                for (MultipartFile file : files) {
+                    helper.addAttachment(file.getOriginalFilename(), file);
+                }
+            }
+//             파일 첨부 처리 E
             javaMailSender.send(message);
 
             return true;
