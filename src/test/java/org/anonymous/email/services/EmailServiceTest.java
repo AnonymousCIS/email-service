@@ -15,22 +15,22 @@ public class EmailServiceTest {
     @Autowired
     private EmailService emailService;
 
-//    private MockMultipartFile file1;
-//    private MockMultipartFile file2;
+    private MockMultipartFile file1;
+    private MockMultipartFile file2;
 
-//    @BeforeEach
-//    void init() {
-//        file1 = new MockMultipartFile("file", "test1.png", MediaType.IMAGE_PNG_VALUE, new byte[] {0, 1, 2, 3});
-//        file2 = new MockMultipartFile("file", "test2.png", MediaType.IMAGE_PNG_VALUE, new byte[] {0, 1, 2, 3});
-//    }
+    @BeforeEach
+    void init() {
+        file1 = new MockMultipartFile("file", "test1.png", MediaType.IMAGE_PNG_VALUE, new byte[] {0, 1, 2, 3});
+        file2 = new MockMultipartFile("file", "test2.png", MediaType.IMAGE_PNG_VALUE, new byte[] {0, 1, 2, 3});
+    }
 
     @Test
     void test1() {
         RequestEmail form = new RequestEmail();
-        form.setTo(List.of("yonggyo00@kakao.com"));
+        form.setTo(List.of("ckxodlf12@naver.com"));
         form.setSubject("테스트 이메일 전송");
         form.setContent("테스트 이메일 내용...");
-//        form.setFiles(List.of(file1, file2));
+        form.setFiles(List.of(file1, file2));
 
         emailService.sendEmail(form, "general");
     }
