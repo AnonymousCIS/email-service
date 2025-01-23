@@ -14,7 +14,7 @@ import java.util.UUID;
 public class CommonInterceptor implements HandlerInterceptor { // 처음 들어오면 무조건 부여하고 시작하겠다. 언제 사용하느냐 비회원이 뭔갈 할 때.
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String key = "userHash"; // userHash가 키값
+        String key = "userHash"; // userHash 가 키값
 
         Cookie[] cookies = request.getCookies(); // 요청된 쿠키정보 확인
 
@@ -32,7 +32,7 @@ public class CommonInterceptor implements HandlerInterceptor { // 처음 들어�
 
         userHash = StringUtils.hasText(userHash) ? userHash : UUID.randomUUID().toString(); // userHash가 비어있지 않으면 userHash 그대로 반환 비어있으면 랜덤으러 생성
 
-        response.setHeader("Set-Cookie", String.format("%s=%s; Path=/; HttpOnly; SameSite=None", userKey, userHash)); // 헤더 셋해줌
+        response.setHeader("Set-Cookie", String.format("%s=%s; Path=/; HttpOnly; SameSite=None; Secure", userKey, userHash)); // 헤더 셋해줌
         /* 사용자 구분 목적의 hash 생성 E */
 
         return true;
