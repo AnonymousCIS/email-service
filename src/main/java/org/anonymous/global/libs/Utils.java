@@ -1,7 +1,10 @@
 package org.anonymous.global.libs;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.anonymous.global.entities.CodeValue;
+import org.anonymous.global.repositories.CodeValueRepository;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.MessageSource;
@@ -12,10 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Lazy
@@ -26,6 +26,7 @@ public class Utils {
     private final HttpServletRequest request;
     private final MessageSource messageSource;
     private final DiscoveryClient discoveryClient;
+    private final CodeValueRepository codeValueRepository;
 
     /**
      * 메서지 코드로 조회된 문구
@@ -119,8 +120,68 @@ public class Utils {
      * @return
      */
     public String getAuthToken() {
-        String auth = request.getHeader("Authorization");
+        String auth = request.getHeader("Authorization"); // 요청 헤더에 Authorization 가져옴
 
-        return StringUtils.hasText(auth) ? auth.substring(7).trim() : null;
+        return StringUtils.hasText(auth) ? auth.substring(7).trim() : null; // auth가 null이 아니면 문자열에서 7번째 인덱스 이후의 부분을 잘라낸 후, 그 앞뒤의 공백을 제거 null일시 null
+    }
+    /**
+     * 전체 주소
+     */
+    public String getUrl(String url){ //url
+        return String.format("%s://%s:%d%s%s", request.getScheme(),request.getServerName(), request.getServerPort(), request.getContextPath(), url);
+    }
+    /**
+     * 사용자 구분을 위한 해시값 조회
+     */
+    public String getUserHash(){
+        String userKey = "" + Objects.hash("userHash");
+
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies){
+            if (cookie.getName().equals(userKey)){
+                return cookie.getValue();
+            }
+        }
+        return null;
+    }
+
+//    /**
+//     * Code - Value 값 저장
+//     *
+//     * @param code
+//     * @param value
+//     */
+//    public <T> void saveValue(String code, T value) { //제네릭으로 확인
+//        CodeValue codeValue = new CodeValue(); // 생성
+//        codeValue.setCode(code); // 제네릭으로 들어온 코드에 맞게 셋해줌
+//        codeValue.setValue(value); // 제네릭으로 들어온 자료형에 맞게 셋해줌
+//        codeValueRepository.save(codeValue); // codeValueRepository에 저장
+//    }
+
+    /**
+     * Code - Value 형태로 Redis 저장소 저장
+     *
+     * @param code
+     * @param value
+     */
+    public void saveValue(String code, Object value) {
+
+        CodeValue item = new CodeValue();
+
+        item.setCode(code);
+        item.setValue(value);
+
+        codeValueRepository.save(item);
+    }
+
+    /**
+     * code로 값 조회
+     * @param code
+     * @return
+     */
+    public <T> T getValue(String code) {
+        CodeValue data = codeValueRepository.findByCode(code); // codeValue 레포지토리에서 코드 정보 찾음
+
+        return data == null ? null : (T)data.getValue(); // 만약 데이터가 null값이면 null null이 아니면 제네릭으로 들어온 자료형으로 형변환
     }
 }
