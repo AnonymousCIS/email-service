@@ -1,7 +1,10 @@
 package org.anonymous.global.libs;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.anonymous.global.entities.CodeValue;
+import org.anonymous.global.repositories.CodeValueRepository;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.MessageSource;
@@ -12,10 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Lazy
@@ -26,6 +26,8 @@ public class Utils {
     private final HttpServletRequest request;
     private final MessageSource messageSource;
     private final DiscoveryClient discoveryClient;
+    private final CodeValue codeValue;
+    private final CodeValueRepository codeValueRepository;
 
     /**
      * 메서지 코드로 조회된 문구
@@ -122,5 +124,33 @@ public class Utils {
         String auth = request.getHeader("Authorization");
 
         return StringUtils.hasText(auth) ? auth.substring(7).trim() : null;
+    }
+    public String getUrl(String url){
+        return String.format("%s://%s:%d%s%s", request.getScheme(),request.getServerName(), request.getServerPort(), request.getContextPath(), url);
+    }
+    public String getUserHash(){
+        String userKey = "" + Objects.hash("userHash");
+
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies){
+            if (cookie.getName().equals(userKey)){
+                return cookie.getValue();
+            }
+        }
+        return null;
+    }
+    public void saveValue(String code, Object value){
+        CodeValue item = new CodeValue();
+
+        item.setCode(code);
+        item.setValue(value);
+
+        codeValueRepository.save(item);
+    }
+
+    public <T> T getValue(String code) {
+        CodeValue data = codeValueRepository.findByCode(code);
+
+        return data == null ? null : (T)data.getValue();
     }
 }

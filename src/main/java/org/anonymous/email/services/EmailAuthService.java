@@ -1,71 +1,59 @@
 package org.anonymous.email.services;
 
-import jakarta.mail.internet.MimeMessage;
+
 import lombok.RequiredArgsConstructor;
 import org.anonymous.email.controllers.RequestEmail;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import org.anonymous.email.exceptions.AuthCodeExpiredException;
+import org.anonymous.email.exceptions.AuthCodeMismatchException;
+import org.anonymous.global.exceptions.BadRequestException;
+import org.anonymous.global.libs.Utils;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import org.thymeleaf.context.Context;
-import org.thymeleaf.spring6.SpringTemplateEngine;
-import org.w3c.dom.Text;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.time.LocalDateTime;
+import java.util.*;
 
-@Lazy
 @Service
 @RequiredArgsConstructor
-public class EmailService {
+public class EmailAuthService {
+    private final Utils utils;
+    private final EmailService emailService;
 
-    private final JavaMailSender javaMailSender;
-    private final SpringTemplateEngine templateEngine;
+    public boolean sendCode(String to){
+        Random random = new Random();
+        String subject = utils.getMessage("Email.authCode.subject");
 
+        Integer authCode = random.nextInt(10000, 99999);
 
-    public boolean sendEmail(RequestEmail form, String tpl, Map<String, Object> tplData) {
+        LocalDateTime expired = LocalDateTime.now().plusMinutes(3L);
 
-        try {
-            Context context = new Context();
-            tplData = Objects.requireNonNullElseGet(tplData, HashMap::new);
+        utils.saveValue(utils.getUserHash() + "_authCode", authCode);
+        utils.saveValue(utils.getUserHash()+ "_expiredTime", expired);
 
-            List<String> to = form.getTo();
-            List<String> cc = form.getCc();
-            List<String> bcc = form.getBcc();
-            String subject = form.getSubject();
-            String content = form.getContent();
-            List<MultipartFile> files = form.getFiles();
+        Map<String, Object> tplData = new HashMap<>();
+        tplData.put("authCode", authCode);
 
-            tplData.put("to", to);
-            tplData.put("cc", cc);
-            tplData.put("bcc", bcc);
-            tplData.put("subject", subject);
-            tplData.put("content", content);
+        RequestEmail form = new RequestEmail();
+        form.setTo(List.of(to));
+        form.setSubject(subject);
 
-            context.setVariables(tplData);
-
-            String html = templateEngine.process("email/" + tpl, context);
-
-            boolean isFileAttached = files != null && !files.isEmpty();
-
-            MimeMessage message = javaMailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
-            helper.setTo(form.getTo().toArray(String[]::new));
-
-            if (cc != null && !cc.isEmpty()) {
-                helper.setCc(cc.toArray(String[]::new));
-            }
-
-            if (bcc != null && !bcc.isEmpty()) {
-                helper.setBcc(bcc.toArray(String[]::new));
-            }
-            helper.setSubject(subject);
-            helper.setText(html, Text);
-        } catch (Exception e){
-            e.printStackTrace();
+        return emailService.sendEmail(form, "auth", tplData);
+    }
+    public void verify(Integer code){
+        if (code == null){
+            throw new BadRequestException(utils.getMessage("NotBlank.authCode"));
         }
+        LocalDateTime expired = utils.getValue(utils.getUserHash()+"_expiredTime");
+        Integer authCode = utils.getValue(utils.getUserHash()+ "_authCode");
+
+        if (expired != null && expired.isBefore(LocalDateTime.now())){
+            throw new AuthCodeExpiredException();
+        }
+        if (authCode == null){
+            throw new BadRequestException();
+        }
+        if (!code.equals(authCode)){
+            throw new AuthCodeMismatchException();
+        }
+        utils.saveValue(utils.getUserHash() + "_authCodeVerified", true);
     }
 }
