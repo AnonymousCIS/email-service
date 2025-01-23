@@ -144,17 +144,34 @@ public class Utils {
         }
         return null;
     }
+
+//    /**
+//     * Code - Value 값 저장
+//     *
+//     * @param code
+//     * @param value
+//     */
+//    public <T> void saveValue(String code, T value) { //제네릭으로 확인
+//        CodeValue codeValue = new CodeValue(); // 생성
+//        codeValue.setCode(code); // 제네릭으로 들어온 코드에 맞게 셋해줌
+//        codeValue.setValue(value); // 제네릭으로 들어온 자료형에 맞게 셋해줌
+//        codeValueRepository.save(codeValue); // codeValueRepository에 저장
+//    }
+
     /**
-     * Code - Value 값 저장
+     * Code - Value 형태로 Redis 저장소 저장
      *
      * @param code
      * @param value
      */
-    public <T> void saveValue(String code, T value) { //제네릭으로 확인
-        CodeValue codeValue = new CodeValue(); // 생성
-        codeValue.setCode(code); // 제네릭으로 들어온 코드에 맞게 셋해줌
-        codeValue.setValue(value); // 제네릭으로 들어온 자료형에 맞게 셋해줌
-        codeValueRepository.save(codeValue); // codeValueRepository에 저장
+    public void saveValue(String code, Object value) {
+
+        CodeValue item = new CodeValue();
+
+        item.setCode(code);
+        item.setValue(value);
+
+        codeValueRepository.save(item);
     }
 
     /**
