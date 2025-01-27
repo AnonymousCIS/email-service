@@ -26,7 +26,6 @@ public class Utils {
     private final HttpServletRequest request;
     private final MessageSource messageSource;
     private final DiscoveryClient discoveryClient;
-    private final CodeValue codeValue;
     private final CodeValueRepository codeValueRepository;
 
     /**

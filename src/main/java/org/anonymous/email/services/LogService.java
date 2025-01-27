@@ -16,12 +16,18 @@ import java.util.List;
 public class LogService {
     private final LogRepository repository;
 
-    public void logStatus(String to, AuthStatus status) {
+    public void logStatus(String to, AuthStatus status, LocalDateTime time) {
         Log log = new Log();
-
-        log.setTo(List.of(to)); // 이메일 수신자
+        log.setTo(to);
         log.setStatus(status);
-        log.setVerificationTime(LocalDateTime.now()); // 상태 기록 시간
-        repository.saveAndFlush(log); // 로그 저장
+        if (status == AuthStatus.REQUESTED){
+            log.setRequestTime(time);
+        } else {
+            log.setVerificationTime(time);
+        }
+
+        log.setVerificationTime(LocalDateTime.now());
+
+        repository.saveAndFlush(log);
     }
 }
