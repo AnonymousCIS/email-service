@@ -82,6 +82,7 @@ public class Utils {
             return messages;
     }
 
+
     /**
      * 유레카 서버 인스턴스 주소 검색
      *
@@ -125,9 +126,18 @@ public class Utils {
 
         return StringUtils.hasText(auth) ? auth.substring(7).trim() : null;
     }
-    public String getUrl(String url){
-        return String.format("%s://%s:%d%s%s", request.getScheme(),request.getServerName(), request.getServerPort(), request.getContextPath(), url);
+    /**
+     * 전체 주소
+     *
+     * @param url
+     * @return
+     */
+    public String getUrl(String url) {
+        int port = request.getServerPort();
+        String _port = port == 80 || port == 443 ? "" : ":" + port;
+        return String.format("%s://%s%s%s%s", request.getScheme(), request.getServerName(), _port, request.getContextPath(), url);
     }
+
     public String getUserHash(){
         String userKey = "" + Objects.hash("userHash");
 
