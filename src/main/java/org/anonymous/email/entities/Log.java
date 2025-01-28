@@ -5,6 +5,7 @@ import lombok.Data;
 import org.anonymous.email.constants.AuthStatus;
 import org.anonymous.global.entities.BaseEntity;
 import org.anonymous.global.entities.BaseMemberEntity;
+import org.anonymous.member.contants.Authority;
 
 
 import java.time.LocalDateTime;
@@ -20,9 +21,14 @@ public class Log extends BaseMemberEntity {
 
     private LocalDateTime requestTime; // 요청 시간.
 
-    private LocalDateTime verificationTime; // 인증 완료 시간 (인증되었을 경우)
+    @Enumerated(EnumType.STRING)
+    @Column(length=20, nullable = false)
+    private Authority listAuthority;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "_STATUS")
     private AuthStatus status; // 인증 상태 (요청, 인증, 만료, 실패)
+
+    @Transient
+    private boolean listable;
 }
