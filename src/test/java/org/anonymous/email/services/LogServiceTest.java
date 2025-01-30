@@ -8,20 +8,26 @@ import org.anonymous.global.paging.ListData;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @SpringBootTest
+@EnableScheduling
 public class LogServiceTest {
 
     @Autowired
     private LogUpdateService logService;
+
     @Autowired
     private LogInfoService logInfoService;
 
     @Autowired
     private LogRepository logRepository;
+
+    @Autowired
+    private LogDeleteService deleteService;
 
     @Test
     void Test1() {
