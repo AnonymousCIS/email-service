@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Table(indexes = {
         @Index(name = "idx_Log_created_at", columnList = "createdAt DESC"),
-        @Index(name = "idx_Log_email", columnList = "Log")
+        @Index(name = "idx_Log_email", columnList = "_Log")
 })
 public class Log extends BaseMemberEntity {
     @Id @GeneratedValue

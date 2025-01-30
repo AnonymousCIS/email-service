@@ -53,10 +53,14 @@ public class AdminEmailController {
         return items;
     }
 
+    /**
+     * 1년뒤 자동 삭제
+     *
+     * @return
+     */
     @DeleteMapping("logDelete")
     public List<Log> delete(){
-        List<Log> items = (List<Log>) deleteService.delete();
 
-        return items;
+        return (List<Log>) deleteService.delete();
     }
 }
