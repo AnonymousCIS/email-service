@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @SpringBootTest
-@EnableScheduling
 public class LogServiceTest {
 
     @Autowired
