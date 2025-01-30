@@ -10,7 +10,6 @@ import org.anonymous.email.entities.Log;
 import org.anonymous.email.services.LogDeleteService;
 import org.anonymous.email.services.LogInfoService;
 import org.anonymous.global.paging.ListData;
-import org.anonymous.global.rests.JSONData;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

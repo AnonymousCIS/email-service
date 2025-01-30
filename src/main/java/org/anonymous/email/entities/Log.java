@@ -14,6 +14,10 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Table(indexes = {
+        @Index(name = "idx_Log_created_at", columnList = "createdAt DESC"),
+        @Index(name = "idx_Log_email", columnList = "Log")
+})
 public class Log extends BaseMemberEntity {
     @Id @GeneratedValue
     private Long seq;
