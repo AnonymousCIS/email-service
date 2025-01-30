@@ -5,10 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.anonymous.email.constants.AuthStatus;
 import org.anonymous.email.controllers.RequestEmail;
-import org.anonymous.email.entities.Log;
 import org.anonymous.email.exceptions.AuthCodeExpiredException;
 import org.anonymous.email.exceptions.AuthCodeMismatchException;
-import org.anonymous.email.repositories.LogRepository;
 import org.anonymous.global.exceptions.BadRequestException;
 import org.anonymous.global.libs.Utils;
 import org.springframework.stereotype.Service;
@@ -22,7 +20,7 @@ import java.util.*;
 public class EmailAuthService {
     private final Utils utils;
     private final EmailService emailService;
-    private final LogService logService; // LogService 의존성 주입
+    private final LogUpdateService logService; // LogService 의존성 주입
 
     // 인증 코드 발송
     public boolean sendCode(String to) {
@@ -41,14 +39,16 @@ public class EmailAuthService {
 
         RequestEmail form = new RequestEmail();
         form.setTo(List.of(to));
+        emailService.sendEmail(form, "auth", tplData);
+        logService.logStatus(to, AuthStatus.REQUESTED, requestTime);
         // 이메일 전송
-        boolean isSent = emailService.sendEmail(form, "auth", tplData);
+//        boolean isSent = emailService.sendEmail(form, "auth", tplData);
 
         // 이메일 전송 후 로그 기록
-        if (isSent) {
-            logService.logStatus(to, AuthStatus.REQUESTED, requestTime); // 인증 요청 상태 기록
-        }
-        return isSent;
+//        if (isSent) {
+//            logService.logStatus(to, AuthStatus.REQUESTED, requestTime); // 인증 요청 상태 기록
+//        }
+        return true;
     }
 
     public void verify(Integer code) {

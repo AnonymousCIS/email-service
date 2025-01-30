@@ -1,13 +1,13 @@
 package org.anonymous.email.services;
 
 import org.anonymous.email.constants.AuthStatus;
+import org.anonymous.email.controllers.LogSearch;
 import org.anonymous.email.entities.Log;
 import org.anonymous.email.repositories.LogRepository;
-import org.junit.jupiter.api.Assertions;
+import org.anonymous.global.paging.ListData;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,7 +16,9 @@ import java.util.List;
 public class LogServiceTest {
 
     @Autowired
-    private LogService logService;
+    private LogUpdateService logService;
+    @Autowired
+    private LogInfoService logInfoService;
 
     @Autowired
     private LogRepository logRepository;
@@ -31,5 +33,17 @@ public class LogServiceTest {
 
         List<Log> logs = logRepository.findAll();
         System.out.println(logs);
+    }
+    @Test
+    void Test2() {
+        LogSearch search = new LogSearch();
+        search.setSopt("TO");
+        search.setSkey("ckxodlf12@naver.com");
+        search.setLimit(1);
+        search.setPage(10);
+
+        ListData<Log> result = logInfoService.getList(search);
+
+        System.out.println(result);
     }
 }

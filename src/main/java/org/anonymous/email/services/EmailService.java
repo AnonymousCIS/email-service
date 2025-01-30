@@ -25,7 +25,13 @@ public class EmailService {
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
 
-
+    /**
+     *
+     * @param form
+     * @param tpl
+     * @param tplData
+     * @return
+     */
     public boolean sendEmail(RequestEmail form, String tpl, Map<String, Object> tplData) {
 
         try {

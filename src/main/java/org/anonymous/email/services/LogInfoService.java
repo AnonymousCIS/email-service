@@ -3,12 +3,15 @@ package org.anonymous.email.services;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.anonymous.email.controllers.LogSearch;
 import org.anonymous.email.entities.Log;
 import org.anonymous.email.entities.QLog;
 import org.anonymous.email.repositories.LogRepository;
+import org.anonymous.global.exceptions.BadRequestException;
 import org.anonymous.global.paging.ListData;
 import org.anonymous.global.paging.Pagination;
 import org.anonymous.member.MemberUtil;
@@ -35,7 +38,9 @@ public class LogInfoService {
 
     // 단일 조회.
     public Log get(Long seq) {
-
+        if (!memberUtil.isAdmin()){
+            throw new BadRequestException();
+        }
         Log log = repository.findById(seq).orElseThrow(RuntimeException::new);
 
         addInfo(log); // 추가 정보 처리
@@ -43,7 +48,11 @@ public class LogInfoService {
         return log;
     }
 
+    // 게시판 목록조회 검색을 통해 누가 요청했는지 또는 요청자의 요청 상태로 검색 가능.
     public ListData<Log> getList(LogSearch search) {
+        if (!memberUtil.isAdmin()){
+            throw new BadRequestException();
+        }
         int page = Math.max(search.getPage(), 1);
         int limit = search.getLimit();
         limit = limit < 1 ? 20 : limit;
@@ -54,13 +63,15 @@ public class LogInfoService {
         /* 검색 처리 S */
         String sopt = search.getSopt();
         String skey = search.getSkey();
-        sopt = StringUtils.hasText(sopt) ? sopt : "TO";  // sopt 값이 없으면 "TO"로 설정
-
+        sopt = StringUtils.hasText(sopt) ? sopt : "ALL";
         if (StringUtils.hasText(skey)) {
             StringExpression condition = null;
-
             if (sopt.equals("TO")) {  // TO만 검색
                 condition = log.to;
+            }   else if (sopt.equals("STATUSES")){
+                condition = log.status.stringValue();
+            }   else {
+                condition = log.to.concat(log.status.stringValue());
             }
 
             andBuilder.and(Objects.requireNonNull(condition).contains(skey.trim()));
