@@ -25,6 +25,7 @@ public class AdminEmailController {
 
     /**
      * 로그 단일 & 목록 조회
+     *
      * @param seq
      * @return
      */
@@ -39,24 +40,24 @@ public class AdminEmailController {
             })
     })
     @GetMapping("view/{seq}")
-    public JSONData view(@PathVariable("seq") Long seq) {
+    public Log view(@PathVariable("seq") Long seq) {
         Log log = logInfoService.get(seq);
 
-        return new JSONData(log);
+        return log;
     }
 
     //목록조회
     @GetMapping("list")
-    public JSONData list(@ModelAttribute LogSearch search) {
+    public ListData<Log> list(@ModelAttribute LogSearch search) {
         ListData<Log> items = logInfoService.getList(search);
 
-        return new JSONData(items);
+        return items;
     }
 
     @DeleteMapping("logDelete")
-    public JSONData delete(){
+    public List<Log> delete(){
         List<Log> items = (List<Log>) deleteService.delete();
 
-        return new JSONData(items);
+        return items;
     }
 }

@@ -1,13 +1,11 @@
 package org.anonymous.email.entities;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.anonymous.email.constants.AuthStatus;
-import org.anonymous.global.entities.BaseEntity;
 import org.anonymous.global.entities.BaseMemberEntity;
-import org.anonymous.member.contants.Authority;
+
 
 
 import java.time.LocalDateTime;
@@ -23,6 +21,8 @@ public class Log extends BaseMemberEntity {
     private String to; // 받는쪽 이메일
 
     private LocalDateTime requestTime; // 요청 시간.
+
+    private LocalDateTime timeStamp; // 로그 자동 제거
 
     @Enumerated(EnumType.STRING)
     @Column(name = "_STATUS")
