@@ -10,6 +10,7 @@ import org.anonymous.email.entities.Log;
 import org.anonymous.email.services.LogDeleteService;
 import org.anonymous.email.services.LogInfoService;
 import org.anonymous.global.paging.ListData;
+import org.anonymous.global.rests.JSONData;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,19 +39,19 @@ public class AdminEmailController {
                     @ExampleObject(name = "failed", value = "failed"),
             })
     })
-    @GetMapping("view/{seq}")
-    public Log view(@PathVariable("seq") Long seq) {
+    @GetMapping("/view/{seq}")
+    public JSONData view(@PathVariable("seq") Long seq) {
         Log log = logInfoService.get(seq);
 
-        return log;
+        return new JSONData(log);
     }
 
     //목록조회
-    @GetMapping("list")
-    public ListData<Log> list(@ModelAttribute LogSearch search) {
+    @GetMapping("/list")
+    public JSONData list(@ModelAttribute LogSearch search) {
         ListData<Log> items = logInfoService.getList(search);
 
-        return items;
+        return new JSONData(items);
     }
 
     /**
@@ -58,9 +59,9 @@ public class AdminEmailController {
      *
      * @return
      */
-    @DeleteMapping("logDelete")
-    public List<Log> delete(){
+    @DeleteMapping("/logDelete")
+    public JSONData delete(){
 
-        return (List<Log>) deleteService.delete();
+        return new JSONData(deleteService.delete());
     }
 }
