@@ -26,7 +26,8 @@ public class EmailController {
             throw new AuthCodeIssueException();
         }
     }
-
+    @Operation(summary = "코드 인증", description = "회원가입시 발급받은 인증코드를 인증")
+    @Parameter(name = "authCode", description = "인증코드", required = true)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @GetMapping("/verify")
     public void verify(@RequestParam(name="authCode", required = false) Integer authCode) {

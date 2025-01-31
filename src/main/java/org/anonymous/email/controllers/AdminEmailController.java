@@ -13,6 +13,8 @@ import org.anonymous.global.paging.ListData;
 import org.anonymous.global.rests.JSONData;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Tag(name = "ADMIN LOGINFO API", description = "관리자 전용 LOG 조회 기능.")
 @RestController
 @RequiredArgsConstructor
@@ -62,8 +64,8 @@ public class AdminEmailController {
      */
     @DeleteMapping("/logDelete")
     public JSONData delete(){
+        deleteService.delete();
 
-        //return new JSONData(deleteService.delete());
         return null;
     }
 }

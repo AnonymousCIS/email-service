@@ -30,6 +30,5 @@ public class LogDeleteService {
             repository.deleteAll(items);
             repository.flush();
         }
-
     }
 }
