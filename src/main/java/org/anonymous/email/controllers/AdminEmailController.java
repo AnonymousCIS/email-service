@@ -43,11 +43,14 @@ public class AdminEmailController {
     //목록조회
     @Operation(summary = "로그 목록조회", description = "관리자가 이메일 인증을 요청한 사람의 로그를 목록으로 검색 및 조회 할 수 있습니다.")
     @Parameters({
-            @Parameter(name = "search", description = "Log 검색 조회", examples = {
-                    @ExampleObject(name = "to", value = "to"),
-                    @ExampleObject(name = "subject", value = "subject"),
-                    @ExampleObject(name = "content", value = "content")
-            })
+            @Parameter(name = "search", description = "Log 검색 조회"),
+            @Parameter(name = "sopt", description = "검색 옵션 ", example = "TO"),
+            @Parameter(name = "skey", description = "검색 키워드", example = "user01@test.org"),
+            @Parameter(name = "page", description = "페이지 번호", example = "1"),
+            @Parameter(name = "limit", description = "페이지 크기", example = "20"),
+            @Parameter(name = "to", description = "이메일 수신자"),
+            @Parameter(name = "subject", description = "이메일 제목"),
+            @Parameter(name = "content", description = "이메일 내용")
 
     })
     @GetMapping("/list")
@@ -55,17 +58,5 @@ public class AdminEmailController {
         ListData<EmailLog> items = logInfoService.getList(search);
 
         return new JSONData(items);
-    }
-
-    /**
-     * 1년뒤 자동 삭제
-     *
-     * @return
-     */
-    @DeleteMapping("/logDelete")
-    public JSONData delete(){
-        deleteService.delete();
-
-        return null;
     }
 }

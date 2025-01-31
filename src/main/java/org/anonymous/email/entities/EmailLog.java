@@ -10,7 +10,7 @@ import org.anonymous.global.entities.BaseMemberEntity;
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Table(indexes = {
-        @Index(name = "idx_Log_created_at", columnList = "createdAt DESC")
+        @Index(name = "idx_Log_created_at", columnList = "cis_createdAt DESC")
 })
 public class EmailLog extends BaseMemberEntity {
     @Id @GeneratedValue
@@ -18,8 +18,8 @@ public class EmailLog extends BaseMemberEntity {
     @Column(name = "_TO", length=100)
     private String to; // 받는쪽 이메일
 
-    private String subject;
+    private String subject; // 제목
 
     @Lob
-    private String content;
+    private String content; // 내용
 }
