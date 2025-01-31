@@ -26,10 +26,9 @@ public class EmailAuthService {
     public boolean sendCode(String to) {
         Random random = new Random();
         String subject = utils.getMessage("Email.authCode.subject");
-
         Integer authCode = random.nextInt(10000, 99999);
         LocalDateTime expired = LocalDateTime.now().plusMinutes(3L);
-        LocalDateTime requestTime = LocalDateTime.now(); // 요청 시간 기록
+
         // 인증 코드와 만료 시간 저장
         utils.saveValue(utils.getUserHash() + "_authCode", authCode);
         utils.saveValue(utils.getUserHash() + "_expiredTime", expired);
@@ -39,8 +38,11 @@ public class EmailAuthService {
 
         RequestEmail form = new RequestEmail();
         form.setTo(List.of(to));
-        emailService.sendEmail(form, "auth", tplData);
-        logService.logStatus(to, AuthStatus.REQUESTED, requestTime);
+        form.setSubject(subject);
+        form.setContent(String.valueOf(authCode));
+        form.setCreatedAt(LocalDateTime.now());
+        logService.logStatus(form);
+//        logService.logStatus(to, AuthStatus.REQUESTED, requestTime);
         // 이메일 전송
 //        boolean isSent = emailService.sendEmail(form, "auth", tplData);
 
@@ -48,7 +50,7 @@ public class EmailAuthService {
 //        if (isSent) {
 //            logService.logStatus(to, AuthStatus.REQUESTED, requestTime); // 인증 요청 상태 기록
 //        }
-        return true;
+        return emailService.sendEmail(form, "auth", tplData);
     }
 
     public void verify(Integer code) {
@@ -60,7 +62,7 @@ public class EmailAuthService {
         Integer authCode = utils.getValue(utils.getUserHash() + "_authCode");
 
         if (expired != null && expired.isBefore(LocalDateTime.now())) {
-            logService.logStatus(null, AuthStatus.EXPIRED ,LocalDateTime.now()); // 인증 만료 상태 기록
+//            logService.logStatus(null, AuthStatus.EXPIRED ,LocalDateTime.now()); // 인증 만료 상태 기록
             throw new AuthCodeExpiredException();
         }
 
@@ -69,12 +71,12 @@ public class EmailAuthService {
         }
 
         if (!code.equals(authCode)) {
-            logService.logStatus(null, AuthStatus.FAILED, LocalDateTime.now()); // 인증 실패 상태 기록
+//            logService.logStatus(null, AuthStatus.FAILED, LocalDateTime.now()); // 인증 실패 상태 기록
             throw new AuthCodeMismatchException();
         }
 
         // 인증 코드 검증 성공
         utils.saveValue(utils.getUserHash() + "_authCodeVerified", true);
-        logService.logStatus(null, AuthStatus.VERIFIED, LocalDateTime.now()); // 인증 완료 상태 기록
+//        logService.logStatus(null, AuthStatus.VERIFIED, LocalDateTime.now()); // 인증 완료 상태 기록
     }
 }

@@ -9,5 +9,6 @@ import java.util.List;
 @Data
 public class LogSearch extends CommonSearch {
     private List<String> to;
-    private List<AuthStatus> statuses;
+    private List<String> subject;
+    private List<String> content;
 }

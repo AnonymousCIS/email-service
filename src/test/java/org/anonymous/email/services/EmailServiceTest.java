@@ -27,7 +27,7 @@ public class EmailServiceTest {
     @Test
     void test1() {
         RequestEmail form = new RequestEmail();
-        form.setTo(List.of("yonggyo00@kakao.com"));
+        form.setTo(List.of("ckxodlf12@naver.com"));
         form.setSubject("테스트 이메일 전송");
         form.setContent("테스트 이메일 내용...");
         form.setFiles(List.of(file1, file2));

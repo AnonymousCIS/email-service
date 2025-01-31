@@ -1,33 +1,35 @@
 package org.anonymous.email.services;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.anonymous.email.entities.Log;
+import org.anonymous.email.entities.EmailLog;
+import org.anonymous.email.entities.QEmailLog;
 import org.anonymous.email.repositories.LogRepository;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Lazy
 @Service
-@EnableScheduling
 @RequiredArgsConstructor
 public class LogDeleteService {
     private final LogRepository repository;
 
     /**
-     * 1년 마다 오후 12시에 자동삭제
+     * 1년 마다 오전 12시에 삭제
      * @return
      */
-    @Async
-    @Transactional
-    @Scheduled(cron = "0 0 12 * * *")
-    public Log delete(){
-        repository.deleteByTimeStamp(LocalDateTime.now().minusYears(1L));
 
-        return null;
+    @Scheduled(cron = "0 0 0 * * *")
+    public void delete(){
+        QEmailLog emailLog = QEmailLog.emailLog;
+        List<EmailLog> items = (List<EmailLog>)repository.findAll(emailLog.createdAt.before(LocalDateTime.now().minusYears(1L)));
+        if (items != null && !items.isEmpty()) {
+            repository.deleteAll(items);
+            repository.flush();
+        }
+
     }
 }
