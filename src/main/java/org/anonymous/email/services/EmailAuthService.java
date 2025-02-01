@@ -57,7 +57,6 @@ public class EmailAuthService {
         if (code == null) {
             throw new BadRequestException(utils.getMessage("NotBlank.authCode"));
         }
-
         LocalDateTime expired = utils.getValue(utils.getUserHash() + "_expiredTime");
         Integer authCode = utils.getValue(utils.getUserHash() + "_authCode");
 
