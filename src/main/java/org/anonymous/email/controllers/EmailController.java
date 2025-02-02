@@ -1,5 +1,6 @@
 package org.anonymous.email.controllers;
 
+<<<<<<< Updated upstream
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -59,4 +60,24 @@ public class EmailController {
         emailService.sendEmail(form, tpl);
     }
 
+=======
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequiredArgsConstructor
+public class EmailController {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @GetMapping("/auth/{to}")
+    public void authCode(@PathVariable("to") String to){
+
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @GetMapping("/verify")
+    public void verify(@RequestParam(name = "authCode", required = false) Integer authCode){
+
+    }
+>>>>>>> Stashed changes
 }
