@@ -1,5 +1,6 @@
 package org.anonymous.email.controllers;
 
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -17,6 +18,11 @@ import org.springframework.web.bind.annotation.*;
 public class EmailController {
     private final EmailAuthService authService;
 
+     /**
+     * 인증코드 발급
+     *
+     * @param to
+     */
     @Operation(summary = "코드 발송", description = "회원가입시 이메일 인증코드 발송")
     @Parameter(name = "to", description = "요청자 이메일")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -26,6 +32,11 @@ public class EmailController {
             throw new AuthCodeIssueException();
         }
     }
+    /**
+     * 발급받은 인증코드 검증
+     *
+     * @param authCode
+     */
     @Operation(summary = "코드 인증", description = "회원가입시 발급받은 인증코드를 인증")
     @Parameter(name = "authCode", description = "인증코드", required = true)
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -33,4 +44,16 @@ public class EmailController {
     public void verify(@RequestParam(name="authCode", required = false) Integer authCode) {
         authService.verify(authCode);
     }
+    /**
+     * 메일 전송하기
+     *
+     * @param form
+     */
+    @PostMapping({"", "/tpl/{tpl}"})
+    public void sendEmail(@PathVariable(name="tpl", required = false) String tpl, @RequestPart(name="file", required = false) List<MultipartFile> files, @ModelAttribute RequestEmail form) {
+        form.setFiles(files);
+        tpl = StringUtils.hasText(tpl) ? tpl : "general";
+        emailService.sendEmail(form, tpl);
+    }
+
 }
