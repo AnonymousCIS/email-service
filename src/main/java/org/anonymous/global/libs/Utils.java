@@ -81,6 +81,7 @@ public class Utils {
             return messages;
     }
 
+
     /**
      * 유레카 서버 인스턴스 주소 검색
      *
@@ -183,5 +184,42 @@ public class Utils {
         CodeValue data = codeValueRepository.findByCode(code); // codeValue 레포지토리에서 코드 정보 찾음
 
         return data == null ? null : (T)data.getValue(); // 만약 데이터가 null값이면 null null이 아니면 제네릭으로 들어온 자료형으로 형변환
+    }
+    /**
+     * 전체 주소
+     *
+     * @param url
+     * @return
+     */
+    public String getUrl(String url) {
+        int port = request.getServerPort();
+        String _port = port == 80 || port == 443 ? "" : ":" + port;
+        return String.format("%s://%s%s%s%s", request.getScheme(), request.getServerName(), _port, request.getContextPath(), url);
+    }
+
+    public String getUserHash(){
+        String userKey = "" + Objects.hash("userHash");
+
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies){
+            if (cookie.getName().equals(userKey)){
+                return cookie.getValue();
+            }
+        }
+        return null;
+    }
+    public void saveValue(String code, Object value){
+        CodeValue item = new CodeValue();
+
+        item.setCode(code);
+        item.setValue(value);
+
+        codeValueRepository.save(item);
+    }
+
+    public <T> T getValue(String code) {
+        CodeValue data = codeValueRepository.findByCode(code);
+
+        return data == null ? null : (T)data.getValue();
     }
 }

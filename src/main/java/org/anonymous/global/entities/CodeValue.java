@@ -5,12 +5,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Data
-@RedisHash(timeToLive=300) // 5분간 값 유지 사용자마다 확인해야 하기 때문에 redis사용
+@RedisHash(timeToLive = 300)
 public class CodeValue implements Serializable {
-
     @Id
-    private String code; // 기본키
+    private String code;
     private Object value;
 }

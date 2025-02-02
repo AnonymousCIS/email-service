@@ -3,6 +3,7 @@ package org.anonymous.email.services;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.anonymous.email.controllers.RequestEmail;
+import org.attoparser.dom.Text;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -27,8 +28,8 @@ public class EmailService {
     /**
      *
      * @param form
-     * @param tpl : 템플릿 코드  email/{tpl}.html
-     * @param tplData : 템플릿에 전달하는 데이터(EL 속성으로 추가)
+     * @param tpl
+     * @param tplData
      * @return
      */
     public boolean sendEmail(RequestEmail form, String tpl, Map<String, Object> tplData) {
@@ -67,36 +68,30 @@ public class EmailService {
             if (bcc != null && !bcc.isEmpty()) {
                 helper.setBcc(bcc.toArray(String[]::new));
             }
-
             helper.setSubject(subject);
             helper.setText(html, true);
-            // 파일 첨부 처리 S
             if (isFileAttached) {
-                for (MultipartFile file : files) {
+                for (MultipartFile file : files){
                     helper.addAttachment(file.getOriginalFilename(), file);
                 }
             }
-//             파일 첨부 처리 E
             javaMailSender.send(message);
 
             return true;
-        } catch(Exception e) {
+        } catch (Exception e){
             e.printStackTrace();
         }
-
         return false;
     }
-
-    public boolean sendEmail(RequestEmail form, String tpl) {
+    public boolean sendEmail(RequestEmail form, String tpl){
         return sendEmail(form, tpl, null);
     }
-
-    public boolean sendEmail(String to, String subject, String content) {
+    public boolean sendEmail(String to, String subject, String content){
         RequestEmail form = new RequestEmail();
         form.setTo(List.of(to));
         form.setSubject(subject);
         form.setContent(content);
 
-        return sendEmail(form, "general");
+        return sendEmail(form,"general");
     }
 }

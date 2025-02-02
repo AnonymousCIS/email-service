@@ -34,4 +34,5 @@ public class EmailServiceTest {
 
         emailService.sendEmail(form, "general");
     }
+
 }
