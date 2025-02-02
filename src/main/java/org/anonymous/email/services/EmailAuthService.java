@@ -1,7 +1,5 @@
 package org.anonymous.email.services;
 
-<<<<<<< Updated upstream
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.anonymous.email.constants.AuthStatus;
@@ -80,10 +78,3 @@ public class EmailAuthService {
 //        logService.logStatus(null, AuthStatus.VERIFIED, LocalDateTime.now()); // 인증 완료 상태 기록
     }
 }
-=======
-import org.springframework.stereotype.Service;
-
-@Service
-public class EmailAuthService {
-}
->>>>>>> Stashed changes
