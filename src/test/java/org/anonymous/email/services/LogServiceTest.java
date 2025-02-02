@@ -101,9 +101,10 @@ public class LogServiceTest {
         System.out.println(result);
 
     }
+
     @Test
     @Scheduled(cron = "0 0 0 * * *")
-    void Test5() throws Exception{
+    void Test6() throws Exception{
         deleteService.delete();
     }
 }
