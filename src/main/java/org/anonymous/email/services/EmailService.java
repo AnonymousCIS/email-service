@@ -3,7 +3,10 @@ package org.anonymous.email.services;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.anonymous.email.controllers.RequestEmail;
+<<<<<<< Updated upstream
 import org.attoparser.dom.Text;
+=======
+>>>>>>> Stashed changes
 import org.springframework.context.annotation.Lazy;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -21,6 +24,7 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class EmailService {
+<<<<<<< Updated upstream
 
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
@@ -34,6 +38,12 @@ public class EmailService {
      */
     public boolean sendEmail(RequestEmail form, String tpl, Map<String, Object> tplData) {
 
+=======
+    private final JavaMailSender javaMailSender;
+    private final SpringTemplateEngine templateEngine;
+
+    public boolean sendEmail(RequestEmail form, String tpl, Map<String, Object> tplData){
+>>>>>>> Stashed changes
         try {
             Context context = new Context();
             tplData = Objects.requireNonNullElseGet(tplData, HashMap::new);
@@ -61,6 +71,7 @@ public class EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
             helper.setTo(form.getTo().toArray(String[]::new));
 
+<<<<<<< Updated upstream
             if (cc != null && !cc.isEmpty()) {
                 helper.setCc(cc.toArray(String[]::new));
             }
@@ -95,3 +106,19 @@ public class EmailService {
         return sendEmail(form,"general");
     }
 }
+=======
+            if (cc != null && !cc.isEmpty()){
+                helper.setCc(cc.toArray(String[]::new));
+            }
+            if (bcc != null && !bcc.isEmpty()){
+                helper.setBcc(bcc.toArray(String[]::new));
+            }
+            helper.setSubject(subject);
+            helper.set
+        }catch (Exception e){
+            e.printStackTrace();
+
+        }
+    }
+}
+>>>>>>> Stashed changes

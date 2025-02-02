@@ -1,9 +1,11 @@
 package org.anonymous.email.controllers;
 
+<<<<<<< Updated upstream
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.anonymous.email.exceptions.AuthCodeIssueException;
@@ -24,6 +26,7 @@ public class EmailController {
      * @param to
      */
     @Operation(summary = "코드 발송", description = "회원가입시 이메일 인증코드 발송")
+    @ApiResponse(responseCode = "204")
     @Parameter(name = "to", description = "요청자 이메일")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @GetMapping("/auth/{to}")
@@ -38,6 +41,7 @@ public class EmailController {
      * @param authCode
      */
     @Operation(summary = "코드 인증", description = "회원가입시 발급받은 인증코드를 인증")
+    @ApiResponse(responseCode = "204")
     @Parameter(name = "authCode", description = "인증코드", required = true)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @GetMapping("/verify")
@@ -56,4 +60,24 @@ public class EmailController {
         emailService.sendEmail(form, tpl);
     }
 
+=======
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequiredArgsConstructor
+public class EmailController {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @GetMapping("/auth/{to}")
+    public void authCode(@PathVariable("to") String to){
+
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @GetMapping("/verify")
+    public void verify(@RequestParam(name = "authCode", required = false) Integer authCode){
+
+    }
+>>>>>>> Stashed changes
 }
