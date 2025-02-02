@@ -2,7 +2,6 @@ package org.anonymous.email.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.anonymous.email.constants.AuthStatus;
 import org.anonymous.email.controllers.RequestEmail;
 import org.anonymous.email.exceptions.AuthCodeExpiredException;
 import org.anonymous.email.exceptions.AuthCodeMismatchException;

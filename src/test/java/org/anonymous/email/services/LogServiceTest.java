@@ -1,19 +1,18 @@
 package org.anonymous.email.services;
 
-import com.netflix.discovery.converters.Auto;
 import jakarta.mail.internet.MimeMessage;
-import org.anonymous.email.constants.AuthStatus;
 import org.anonymous.email.controllers.LogSearch;
 import org.anonymous.email.controllers.RequestEmail;
 import org.anonymous.email.entities.EmailLog;
 import org.anonymous.email.repositories.LogRepository;
 import org.anonymous.global.paging.ListData;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -26,6 +25,7 @@ import java.util.Map;
 @SpringBootTest
 public class LogServiceTest {
 
+    private static final Logger log = LoggerFactory.getLogger(LogServiceTest.class);
     @Autowired
     private EmailService emailService;
     @Autowired
@@ -101,7 +101,12 @@ public class LogServiceTest {
         System.out.println(result);
 
     }
+    @Test
+    void Test5() throws Exception{
 
+        EmailLog log = logInfoService.get(1L);
+        System.out.println(log);
+    }
     @Test
     @Scheduled(cron = "0 0 0 * * *")
     void Test6() throws Exception{
