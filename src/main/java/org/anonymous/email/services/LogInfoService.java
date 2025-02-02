@@ -47,9 +47,9 @@ public class LogInfoService {
 
     // 게시판 목록조회 검색을 통해 누가 요청했는지 또는 요청자의 요청 상태로 검색 가능.
     public ListData<EmailLog> getList(LogSearch search) {
-//        if (!memberUtil.isAdmin()){
-//            throw new BadRequestException();
-//        }
+        if (!memberUtil.isAdmin()){
+            throw new BadRequestException();
+        }
         int page = Math.max(search.getPage(), 1);
         int limit = search.getLimit();
         limit = limit < 1 ? 20 : limit;
