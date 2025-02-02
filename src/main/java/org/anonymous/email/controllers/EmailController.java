@@ -1,7 +1,5 @@
 package org.anonymous.email.controllers;
 
-<<<<<<< Updated upstream
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -10,17 +8,23 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.anonymous.email.exceptions.AuthCodeIssueException;
 import org.anonymous.email.services.EmailAuthService;
+import org.anonymous.email.services.EmailService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Tag(name = "이메일 인증 API", description = "회원가입 시 이메일 인증 코드 보내주는 컨트롤러")
 @RestController
 @RequiredArgsConstructor
 public class EmailController {
     private final EmailAuthService authService;
+    private final EmailService emailService;
 
-     /**
+    /**
      * 인증코드 발급
      *
      * @param to
@@ -35,6 +39,7 @@ public class EmailController {
             throw new AuthCodeIssueException();
         }
     }
+
     /**
      * 발급받은 인증코드 검증
      *
@@ -45,39 +50,19 @@ public class EmailController {
     @Parameter(name = "authCode", description = "인증코드", required = true)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @GetMapping("/verify")
-    public void verify(@RequestParam(name="authCode", required = false) Integer authCode) {
+    public void verify(@RequestParam(name = "authCode", required = false) Integer authCode) {
         authService.verify(authCode);
     }
+
     /**
      * 메일 전송하기
      *
      * @param form
      */
     @PostMapping({"", "/tpl/{tpl}"})
-    public void sendEmail(@PathVariable(name="tpl", required = false) String tpl, @RequestPart(name="file", required = false) List<MultipartFile> files, @ModelAttribute RequestEmail form) {
+    public void sendEmail(@PathVariable(name = "tpl", required = false) String tpl, @RequestPart(name = "file", required = false) List<MultipartFile> files, @ModelAttribute RequestEmail form) {
         form.setFiles(files);
         tpl = StringUtils.hasText(tpl) ? tpl : "general";
         emailService.sendEmail(form, tpl);
     }
-
-=======
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-@RestController
-@RequiredArgsConstructor
-public class EmailController {
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @GetMapping("/auth/{to}")
-    public void authCode(@PathVariable("to") String to){
-
-    }
-
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @GetMapping("/verify")
-    public void verify(@RequestParam(name = "authCode", required = false) Integer authCode){
-
-    }
->>>>>>> Stashed changes
 }
