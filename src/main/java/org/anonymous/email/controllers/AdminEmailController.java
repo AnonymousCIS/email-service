@@ -51,7 +51,6 @@ public class AdminEmailController {
             @Parameter(name = "to", description = "이메일 수신자"),
             @Parameter(name = "subject", description = "이메일 제목"),
             @Parameter(name = "content", description = "이메일 내용")
-
     })
     @GetMapping("/list")
     public JSONData list(@ModelAttribute LogSearch search) {
