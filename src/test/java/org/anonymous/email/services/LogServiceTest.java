@@ -112,4 +112,5 @@ public class LogServiceTest {
     void Test6() throws Exception{
         deleteService.delete();
     }
+
 }
