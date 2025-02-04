@@ -21,7 +21,6 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminEmailController {
     private final LogInfoService logInfoService;
-    private final LogDeleteService deleteService;
 
     /**
      * 로그 단일 & 목록 조회
@@ -29,9 +28,10 @@ public class AdminEmailController {
      * @param seq
      * @return
      */
+    // 단일조회
     @Operation(summary = "로그 단일조회", description = "관리자가 이메일 인증을 요청한 사람의 이메일 로그를 조회할 수 있습니다.")
     @Parameters({
-            @Parameter(name = "seq", description = "로그 ID", required = true, example = "1125")
+            @Parameter(name = "seq", description = "로그 ID", required = true, example = "1")
 
     })
     @GetMapping("/view/{seq}")
@@ -51,7 +51,6 @@ public class AdminEmailController {
             @Parameter(name = "to", description = "이메일 수신자"),
             @Parameter(name = "subject", description = "이메일 제목"),
             @Parameter(name = "content", description = "이메일 내용")
-
     })
     @GetMapping("/list")
     public JSONData list(@ModelAttribute LogSearch search) {

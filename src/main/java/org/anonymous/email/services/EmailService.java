@@ -58,6 +58,7 @@ public class EmailService {
 
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
+            System.out.println("To : " + form.getTo());
             helper.setTo(form.getTo().toArray(String[]::new));
 
             if (cc != null && !cc.isEmpty()) {

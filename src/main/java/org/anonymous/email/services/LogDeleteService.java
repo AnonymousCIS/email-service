@@ -26,7 +26,7 @@ public class LogDeleteService {
     public void delete(){
         QEmailLog emailLog = QEmailLog.emailLog;
         List<EmailLog> items = (List<EmailLog>)repository.findAll(emailLog.createdAt.before(LocalDateTime.now().minusYears(1L)));
-        if (items != null && !items.isEmpty()) {
+        if (!items.isEmpty()) {
             repository.deleteAll(items);
             repository.flush();
         }

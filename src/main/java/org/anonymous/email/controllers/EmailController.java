@@ -59,7 +59,16 @@ public class EmailController {
      *
      * @param form
      */
-    @PostMapping({"", "/tpl/{tpl}"})
+    @Operation(summary = "메일 전송", description = "필요 시 메일 전송")
+    @Parameters({
+            @Parameter(name = "createdAt", description = "전송시간"),
+            @Parameter(name = "to", description = "수신자", example = "TO"),
+            @Parameter(name = "subject", description = "검색 키워드", example = "user01@test.org"),
+            @Parameter(name = "content", description = "이메일 내용"),
+            @Parameter(name = "cc", description = "참조"),
+            @Parameter(name = "bcc", description = "숨은참조"),
+    })
+    @PostMapping({"/", "/tpl/{tpl}"})
     public void sendEmail(@PathVariable(name = "tpl", required = false) String tpl, @RequestPart(name = "file", required = false) List<MultipartFile> files, @ModelAttribute RequestEmail form) {
         form.setFiles(files);
         tpl = StringUtils.hasText(tpl) ? tpl : "general";
