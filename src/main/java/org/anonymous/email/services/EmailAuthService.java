@@ -38,7 +38,6 @@ public class EmailAuthService {
         form.setTo(List.of(to));
         form.setSubject(subject);
         form.setContent(String.valueOf(authCode));
-        form.setCreatedAt(LocalDateTime.now());
         logService.logStatus(form);
 //        logService.logStatus(to, AuthStatus.REQUESTED, requestTime);
         // 이메일 전송
