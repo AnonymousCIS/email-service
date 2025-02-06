@@ -1,6 +1,5 @@
 
-<img src="https://github.com/user-attachments/assets/f8e41402-397d-43b8-b2cf-5426a575514e" width="1000"/>
-
+<img src="https://github.com/user-attachments/assets/f8e41402-397d-43b8-b2cf-5426a575514e" width="300"/>
 
 # EMAIL-SERVICE
 
@@ -42,7 +41,8 @@ ADMIN EMAIL
 ERD
 -----------------------------
 
-![MSA_PROJECT - EMAIL_LOG](https://github.com/user-attachments/assets/755a42e1-35c6-4e56-a37e-d078685ff11e)
+![제목 없음](https://github.com/user-attachments/assets/2b8fcf53-93c9-432a-9858-6ea52a421fa7)
+
 
 + SEQ : 이메일 로그 번호(기본키)
 + CreatedAt: 이메일 발송 시간.
