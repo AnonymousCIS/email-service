@@ -59,7 +59,7 @@ ERD
 
 SWAGGER API
 ------------------------------
-http://cis-email-service.koreait.xyz/swagger-ui/index.html
+http://cis-email-service.koreait.xyz/apidocs.html
 ![image](https://github.com/user-attachments/assets/8f3eb17a-04b9-4f60-b707-2dfbc27b9de9)
 
 
