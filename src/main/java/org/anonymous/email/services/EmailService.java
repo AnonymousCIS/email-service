@@ -78,7 +78,6 @@ public class EmailService {
                 }
 
             }
-
             javaMailSender.send(message);
             
             logService.logStatus(form);
