@@ -40,17 +40,25 @@ ADMIN EMAIL
 
 ERD 엔티티 명세
 -----------------------------
+![MSA_PROJECT - EMAIL_LOG](https://github.com/user-attachments/assets/fd6419d3-5c8d-42d5-9942-0b25308ebe6b)
 
-![제목 없음](https://github.com/user-attachments/assets/2b8fcf53-93c9-432a-9858-6ea52a421fa7)
+
+
 
 엔티티
 ---------------------------------
-+ SEQ : 이메일 로그 번호(기본키)
-+ CreatedAt: 이메일 발송 시간.
-  + 사용자가 이메일 요청시 발송된 시간을 저장합니다.
+| 키  | 논리 | 물리           | 도메인 | 타입          | Length | UNIQUE | NULL허용 | 기본값 |
+|:--:|-----------------------|--------------|---------------|-------------|--------|--|------|---|
+| pk | 이메일 로그 번호                  | SEQ          | Long          | NUMBER      |        |        |
+|    | 수신자                   | _to         | String        | VARCHAR     | 45     |        | N      |   |       |
+|    | 이메일 제목                | Subject     | String        | VARCHAR     | 45     |        |        |   |  |
+|    | 이메일 내용              | Content    | String        | VARCHAR     | 100    |        | N      |   |       |
+|    | 이메일 작성자                   | CREATED_BY    | String        | VARCHAR     | 30     |         |        |   |       |
+|    | 이메일 발송 시간.                      | CREATED_AT   | LocalDateTime | TIMESTAMP        |        |         |        | SYSDATE 
+
++ SEQ : (기본키)
+.
    
-+ DeletedAt: 이메일 로그 삭제 시간.
-  + 이메일 로그가 삭제된 시간을 기록합니다.
 + _to: 수신자
   + 이메일을 요청한 수신자를 저장합니다.
 + 이메일 제목
