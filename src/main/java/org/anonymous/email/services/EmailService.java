@@ -80,7 +80,7 @@ public class EmailService {
             }
             javaMailSender.send(message);
             
-            logService.logStatus(form);
+            logService.logStatus(form); // 추가
 
             return true;
         } catch (Exception e){
