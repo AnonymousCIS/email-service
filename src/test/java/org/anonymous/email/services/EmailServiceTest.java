@@ -1,6 +1,8 @@
 package org.anonymous.email.services;
 
 import org.anonymous.email.controllers.RequestEmail;
+import org.anonymous.email.entities.EmailLog;
+import org.anonymous.email.repositories.LogRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,8 @@ import java.util.List;
 public class EmailServiceTest {
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private LogRepository repository;
 
     private MockMultipartFile file1;
     private MockMultipartFile file2;
@@ -33,6 +37,12 @@ public class EmailServiceTest {
         // form.setFiles(List.of(file1, file2));
 
         emailService.sendEmail(form, "general");
+    }
+    @Test
+    void test2() {
+
+        List<EmailLog> item = repository.findAll();
+        System.out.println(item);
     }
 //    @Test
 //    void Test2(){

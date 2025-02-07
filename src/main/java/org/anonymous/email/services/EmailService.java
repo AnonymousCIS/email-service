@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ public class EmailService {
 
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
+    private final LogUpdateService logService;
 
     /**
      *
@@ -74,8 +76,11 @@ public class EmailService {
                 for (MultipartFile file : files){
                     helper.addAttachment(file.getOriginalFilename(), file);
                 }
+
             }
             javaMailSender.send(message);
+            
+            logService.logStatus(form); // 추가
 
             return true;
         } catch (Exception e){
@@ -91,7 +96,7 @@ public class EmailService {
         form.setTo(List.of(to));
         form.setSubject(subject);
         form.setContent(content);
-
+        logService.logStatus(form);
         return sendEmail(form,"general");
     }
 }
