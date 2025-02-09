@@ -69,7 +69,7 @@ public class EmailController {
             @Parameter(name = "bcc", description = "숨은참조"),
     })
     @PostMapping({"/", "/tpl/{tpl}"})
-    public void sendEmail(@PathVariable(name = "tpl", required = false) String tpl, @RequestPart(name = "file", required = false) List<MultipartFile> files, @ModelAttribute RequestEmail form) {
+    public void sendEmail(@PathVariable(name = "tpl", required = false) String tpl, @RequestPart(name = "file", required = false) List<MultipartFile> files, @RequestBody RequestEmail form) {
         form.setFiles(files);
         tpl = StringUtils.hasText(tpl) ? tpl : "general";
         emailService.sendEmail(form, tpl);
