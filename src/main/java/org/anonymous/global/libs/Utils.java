@@ -154,12 +154,14 @@ public class Utils {
         String userKey = "" + Objects.hash("userHash");
 
         Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies){
-            if (cookie.getName().equals(userKey)){
-                return cookie.getValue();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(userKey)) {
+                    return cookie.getValue();
+                }
             }
         }
-        return null;
+        return "";
     }
     public void saveValue(String code, Object value){
         CodeValue item = new CodeValue();
